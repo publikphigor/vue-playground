@@ -2,18 +2,24 @@
   <div
     class="task"
     :class="[completed && 'completed']"
-    :dblclick="toggleHandler(id)"
+    @dblclick="$emit('toggle-handler', id)"
   >
     <p class="taskName">{{ task }}</p>
     <p class="taskTime">{{ time }}</p>
-    <button @click="deleteHandler(id)">x</button>
+    <button @click="$emit('delete-handler', id)">x</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "SingleTask",
-  props: ["task", "time", "id", "completed", "deleteHandler", "toggleHandler"],
+  props: ["task", "time", "id", "completed"],
+  methods: {
+    deleteHandler(id) {
+      console.log(id);
+      this.$emit("delete-handler", id);
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,11 @@
 <template>
   <h1>To-do Application</h1>
-  <div class="addTodo">
-    <form @submit.prevent="addNewTodo">
+  <div
+    class="addTodo"
+    @delete-handler="$emit('delete-handler')"
+    @toggle-handler="$emit('toggle-handler')"
+  >
+    <form @submit.prevent="$emit('add-new-todo', newTodo)">
       <input
         type="text"
         v-model="newTodo.task"
@@ -21,8 +25,6 @@
       :completed="todo.completed"
       :key="i"
       :id="i"
-      :deleteHandler="deleteTodo"
-      :toggleHandler="toggleStatus"
     />
   </div>
 </template>
@@ -35,6 +37,8 @@ export default {
   components: {
     SingleTask,
   },
+  props: ["todos"],
+  emits: ["toggle-handler", "delete-handler"],
   data() {
     return {
       newTodo: {
@@ -42,60 +46,7 @@ export default {
         time: "",
         completed: false,
       },
-      todos: [
-        {
-          task: "Build a todo app with vue",
-          time: "22:00PM",
-          completed: false,
-        },
-        {
-          task: "Build an e-commerce app with vue",
-          time: "22:00PM",
-          completed: false,
-        },
-        {
-          task: "Implement vue router",
-          time: "22:00PM",
-          completed: false,
-        },
-        {
-          task: "Learn Pinia/Vuex",
-          time: "22:00PM",
-          completed: false,
-        },
-        {
-          task: "Watch NetNinja course",
-          time: "22:00PM",
-          completed: false,
-        },
-      ],
     };
-  },
-
-  methods: {
-    addNewTodo() {
-      if (this.newTodo.task === "" || this.newTodo.time === "")
-        return alert("Fill the gaps!");
-
-      this.todos = [...this.todos, { ...this.newTodo }];
-      this.newTodo = {
-        task: "",
-        time: "",
-        completed: false,
-      };
-    },
-    deleteTodo(id) {
-      this.todos = this.todos.filter((_, i) => i !== id);
-    },
-    toggleStatus(id) {
-      const updatedTodos = this.todos.map((todo, i) => {
-        if (i !== id) return todo;
-        return { ...todo, completed: !todo.completed };
-      });
-      console.log(updatedTodos);
-
-      //this.todos = updatedTodos;
-    },
   },
 };
 </script>
